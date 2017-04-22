@@ -52,6 +52,10 @@ To configure a NIS server and client in RHEL7.
 
     /usr/lib64/yp/ypinit -m
 
+#### If the NIS database is updated(Such as user add), it can use the following command for updating 
+
+    make -C /var/yp/
+
 #### 6.Join into the NIS server
 
     authconfig --update --nisdomain=your-domain --nisserver=your-server --enablenis
@@ -62,7 +66,7 @@ To configure a NIS server and client in RHEL7.
     ypwhich
     ypcat passwd
 
-#### 7.For security settings, create /etc/securenets file to configure ACL for permitting the specified clients to connect the server.(for details man ypserv)
+#### 7.For security settings, create /etc/securenets file to configure ACL for permitting the specified clients to connect the server.(for details to read man ypserv)
 
 
     vim /etc/securenets
@@ -80,6 +84,34 @@ To configure a NIS server and client in RHEL7.
     # between 131.234.214.0 and 131.234.215.255
     255.255.254.0   131.234.214.0
 
+#### Also for security settings it is necessary to permit the specified port connections, specify ypserv yppasswdd ypxfrd ports and firewall-cmd rules should be added(check which port use "rpcinfo -p")
+
+    vim /etc/sysconfig/network
+    YPSERV_ARGS="-p 834"
+    YPXFRD_ARGS="-p 835"
+
+    vim /etc/sysconfig/yppasswdd
+    YPPASSWDD_ARGS="--port 836"
+
+    systemctl restart rpcbind.service ypserv.service ypxfrd.service yppasswdd.service
+    firewall-cmd --permanent --add-service=rpc-bind --zone=public
+    firewall-cmd --permanent --add-port=834-836/tcp --zone=public
+    firewall-cmd --permanent --add-port=834-836/udp --zone=public
+    firewall-cmd --reload
 
 ### Perform the following steps to configure the NIS client
+#### 1.Install the necessary NIS client packages and join into server
 
+    yum install ypbind yp-tools -y
+    authconfig --update --nisdomain=your-domain --nisserver=your-server --enablenis --enablemkhomedir
+    systemctl restart ypbind.service
+
+#### It is easier to join into NIS by the authconfig-gtk command(it can select the "Create home directories on the first login")
+
+    yum install authconfig-gtk -y
+    authconfig-gtk
+
+#### Check the user information from NIS Server
+
+    yptest
+    ypcat passwd
