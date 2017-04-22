@@ -14,15 +14,15 @@ To configure a NIS server and client in RHEL7.
     yum install ypserv ypbind rpcbind yp-tools -y
 
 ### Perform the following steps to configure the NIS server
-##  1.The NIS domain needs to be added in /etc/sysconfig/network Edit the file and add the following line to the end of the file
+####1.The NIS domain needs to be added in /etc/sysconfig/network Edit the file and add the following line to the end of the file
 
     NISDOMAIN=DOMAIN-NAME
 
-##  Also can execute the command below so that the domain name is set immediately without rebooting system
+####Also can execute the command below so that the domain name is set immediately without rebooting system
 
     ypdomainname DOMAIN-NAME
 
-##  Verify that it is set correctly
+####Verify that it is set correctly
 
     ypdomainname
-   >DOMAIN-NAME
+  >>DOMAIN-NAME
