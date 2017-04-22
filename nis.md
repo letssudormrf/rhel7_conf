@@ -111,7 +111,7 @@ To configure a NIS server and client in RHEL7.
     yum install authconfig-gtk -y
     authconfig-gtk
 
-#### Check the user information from NIS Server
+#### 2.Check the user information from NIS Server
 
     yptest
     ypcat passwd
