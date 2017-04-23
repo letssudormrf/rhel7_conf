@@ -5,11 +5,11 @@ To configure a NIS server and client in RHEL7.
 
 -----
 
-### For NIS server, it is possible to check whether the following packages are installed on the system using the command rpm -q <package-name>, e.g.
+#### For NIS server, it is possible to check whether the following packages are installed on the system using the command rpm -q <package-name>, e.g.
 
     rpm -q ypserv ypbind rpcbind yp-tools
 
-### If any of these packages are not installed they can be installed by the command yum install <package-name>
+#### If any of these packages are not installed they can be installed by the command yum install <package-name>
 
     yum install ypserv ypbind rpcbind yp-tools -y
 
@@ -66,10 +66,9 @@ To configure a NIS server and client in RHEL7.
     ypwhich
     ypcat passwd
 
-#### 7.For security settings, create /etc/securenets file to configure ACL for permitting the specified clients to connect the server.(for details to read man ypserv)
+#### 7.For security settings, create /var/yp/securenets file to configure ACL for permitting the specified clients to connect the server.(for details to read man ypserv)
 
-
-    vim /etc/securenets
+    vim /var/yp/securenets
 
     A sample securenets file might look like this:
 
